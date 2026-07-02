@@ -213,7 +213,7 @@
                                         th:data-credentialid="${credential.credentialid}"
                                         th:data-url="${credential.url}"
                                         th:data-username="${credential.username}"
-                                        th:data-password="${credential.password}"
+                                        th:data-password="${@credentialService.getDecryptedPassword(credential)}"
                                         onclick="showCredentialModal(
                                             this.dataset.credentialid,
                                             this.dataset.url,
