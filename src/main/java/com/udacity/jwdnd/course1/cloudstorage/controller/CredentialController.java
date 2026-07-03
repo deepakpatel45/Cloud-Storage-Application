@@ -31,16 +31,16 @@ public class CredentialController {
 
         if (credential.getCredentialid() == null) {
             credentialService.addCredential(credential);
+            return "redirect:/home?tab=credentials&success=credentialCreated";
         } else {
             credentialService.updateCredential(credential);
+            return "redirect:/home?tab=credentials&success=credentialUpdated";
         }
-
-        return "redirect:/home";
     }
 
     @GetMapping("/credential/delete/{credentialid}")
     public String deleteCredential(@PathVariable Integer credentialid) {
         credentialService.deleteCredential(credentialid);
-        return "redirect:/home";
+        return "redirect:/home?tab=credentials&success=credentialDeleted";
     }
 }

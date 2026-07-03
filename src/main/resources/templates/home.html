@@ -40,7 +40,6 @@
             <!-- FILES TAB -->
             <div class="tab-pane fade show active" id="nav-files">
 
-                <!-- File Messages -->
                 <div class="alert alert-success"
                      th:if="${param.success != null and param.success[0] == 'fileUploaded'}">
                     File uploaded successfully!
@@ -173,28 +172,22 @@
                     </table>
                 </div>
 
-                <!-- Note Modal -->
                 <div class="modal fade" id="noteModal">
                     <div class="modal-dialog">
                         <div class="modal-content">
 
                             <div class="modal-header">
                                 <h5 class="modal-title">Note</h5>
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span>&times;</span>
-                                </button>
                             </div>
 
                             <div class="modal-body">
                                 <form th:action="@{/note}" method="POST">
-
                                     <input type="hidden" name="noteid" id="note-id">
 
                                     <div class="form-group">
                                         <label for="note-title">Title</label>
                                         <input type="text" name="notetitle"
-                                               class="form-control"
-                                               id="note-title" required>
+                                               class="form-control" id="note-title" required>
                                     </div>
 
                                     <div class="form-group">
@@ -211,10 +204,6 @@
 
                             <div class="modal-footer">
                                 <button type="button"
-                                        class="btn btn-secondary"
-                                        data-dismiss="modal">Close</button>
-
-                                <button type="button"
                                         class="btn btn-primary"
                                         onclick="$('#noteSubmit').click();">
                                     Save changes
@@ -228,6 +217,21 @@
 
             <!-- CREDENTIALS TAB -->
             <div class="tab-pane fade" id="nav-credentials">
+
+                <div class="alert alert-success"
+                     th:if="${param.success != null and param.success[0] == 'credentialCreated'}">
+                    Credential created successfully!
+                </div>
+
+                <div class="alert alert-success"
+                     th:if="${param.success != null and param.success[0] == 'credentialUpdated'}">
+                    Credential updated successfully!
+                </div>
+
+                <div class="alert alert-success"
+                     th:if="${param.success != null and param.success[0] == 'credentialDeleted'}">
+                    Credential deleted successfully!
+                </div>
 
                 <button style="margin: 0.25em;" type="button"
                         class="btn btn-info float-right"
@@ -276,16 +280,12 @@
                     </table>
                 </div>
 
-                <!-- Credential Modal -->
                 <div class="modal fade" id="credentialModal">
                     <div class="modal-dialog">
                         <div class="modal-content">
 
                             <div class="modal-header">
                                 <h5 class="modal-title">Credential</h5>
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span>&times;</span>
-                                </button>
                             </div>
 
                             <div class="modal-body">
@@ -296,22 +296,19 @@
                                     <div class="form-group">
                                         <label for="credential-url">URL</label>
                                         <input type="text" name="url"
-                                               class="form-control"
-                                               id="credential-url" required>
+                                               class="form-control" id="credential-url" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="credential-username">Username</label>
                                         <input type="text" name="username"
-                                               class="form-control"
-                                               id="credential-username" required>
+                                               class="form-control" id="credential-username" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="credential-password">Password</label>
                                         <input type="text" name="password"
-                                               class="form-control"
-                                               id="credential-password" required>
+                                               class="form-control" id="credential-password" required>
                                     </div>
 
                                     <button id="credentialSubmit" type="submit" class="d-none"></button>
@@ -319,10 +316,6 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button"
-                                        class="btn btn-secondary"
-                                        data-dismiss="modal">Close</button>
-
                                 <button type="button"
                                         class="btn btn-primary"
                                         onclick="$('#credentialSubmit').click();">
