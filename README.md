@@ -186,6 +186,6 @@ starter/cloudstorage
 
 ## Author
 
-Deepak Patel
+Paidakula Sai Deepak
 
 GitHub: https://github.com/deepakpatel45
