@@ -65,6 +65,11 @@
                     File upload failed. Please try again.
                 </div>
 
+                <div class="alert alert-danger"
+                     th:if="${param.error != null and param.error[0] == 'fileTooLarge'}">
+                    File is too large to upload.
+                </div>
+
                 <form th:action="@{/file/upload}" enctype="multipart/form-data" method="POST">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
