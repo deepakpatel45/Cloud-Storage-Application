@@ -20,7 +20,8 @@ public class NoteController {
     }
 
     @PostMapping("/note")
-    public String addOrUpdateNote(@ModelAttribute Note note, Authentication authentication) {
+    public String addOrUpdateNote(@ModelAttribute Note note,
+                                  Authentication authentication) {
 
         String username = authentication.getName();
         User user = userService.getUser(username);
@@ -29,16 +30,16 @@ public class NoteController {
 
         if (note.getNoteid() == null) {
             noteService.addNote(note);
+            return "redirect:/home?tab=notes&success=noteCreated";
         } else {
             noteService.updateNote(note);
+            return "redirect:/home?tab=notes&success=noteUpdated";
         }
-
-        return "redirect:/home";
     }
 
     @GetMapping("/note/delete/{noteid}")
     public String deleteNote(@PathVariable Integer noteid) {
         noteService.deleteNote(noteid);
-        return "redirect:/home";
+        return "redirect:/home?tab=notes&success=noteDeleted";
     }
 }

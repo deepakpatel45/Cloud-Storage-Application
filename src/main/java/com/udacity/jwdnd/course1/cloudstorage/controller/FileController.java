@@ -28,29 +28,40 @@ public class FileController {
 
     @PostMapping("/file/upload")
     public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile,
-                             Authentication authentication) throws IOException {
+                             Authentication authentication) {
 
-        String username = authentication.getName();
-        User user = userService.getUser(username);
+        try {
+            String username = authentication.getName();
+            User user = userService.getUser(username);
 
-        if (!multipartFile.isEmpty()) {
-
-            if (!fileService.isFileExists(multipartFile.getOriginalFilename(), user.getUserid())) {
-
-                File file = new File(
-                        null,
-                        multipartFile.getOriginalFilename(),
-                        multipartFile.getContentType(),
-                        String.valueOf(multipartFile.getSize()),
-                        user.getUserid(),
-                        multipartFile.getBytes()
-                );
-
-                fileService.addFile(file);
+            // Empty file check
+            if (multipartFile.isEmpty()) {
+                return "redirect:/home?error=emptyFile";
             }
-        }
 
-        return "redirect:/home";
+            // Duplicate filename check
+            if (fileService.isFileExists(
+                    multipartFile.getOriginalFilename(),
+                    user.getUserid())) {
+                return "redirect:/home?error=fileExists";
+            }
+
+            File file = new File(
+                    null,
+                    multipartFile.getOriginalFilename(),
+                    multipartFile.getContentType(),
+                    String.valueOf(multipartFile.getSize()),
+                    user.getUserid(),
+                    multipartFile.getBytes()
+            );
+
+            fileService.addFile(file);
+
+            return "redirect:/home?success=fileUploaded";
+
+        } catch (IOException e) {
+            return "redirect:/home?error=fileUploadFailed";
+        }
     }
 
     @GetMapping("/file/view/{fileId}")
@@ -68,6 +79,6 @@ public class FileController {
     @GetMapping("/file/delete/{fileId}")
     public String deleteFile(@PathVariable Integer fileId) {
         fileService.deleteFile(fileId);
-        return "redirect:/home";
+        return "redirect:/home?success=fileDeleted";
     }
 }
