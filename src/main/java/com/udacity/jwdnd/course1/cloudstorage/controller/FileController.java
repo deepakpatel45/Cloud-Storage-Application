@@ -65,20 +65,39 @@ public class FileController {
     }
 
     @GetMapping("/file/view/{fileId}")
-    public ResponseEntity<ByteArrayResource> viewFile(@PathVariable Integer fileId) {
+    public ResponseEntity<ByteArrayResource> viewFile(@PathVariable Integer fileId,
+                                                      Authentication authentication) {
+
+        String username = authentication.getName();
+        User user = userService.getUser(username);
 
         File file = fileService.getFile(fileId);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(file.getContenttype()))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + file.getFilename() + "\"")
-                .body(new ByteArrayResource(file.getFiledata()));
+        if (file != null && file.getUserid().equals(user.getUserid())) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(file.getContenttype()))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + file.getFilename() + "\"")
+                    .body(new ByteArrayResource(file.getFiledata()));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/file/delete/{fileId}")
-    public String deleteFile(@PathVariable Integer fileId) {
-        fileService.deleteFile(fileId);
-        return "redirect:/home?success=fileDeleted";
+    public String deleteFile(@PathVariable Integer fileId,
+                             Authentication authentication) {
+
+        String username = authentication.getName();
+        User user = userService.getUser(username);
+
+        File file = fileService.getFile(fileId);
+
+        if (file != null && file.getUserid().equals(user.getUserid())) {
+            fileService.deleteFile(fileId);
+            return "redirect:/home?success=fileDeleted";
+        }
+
+        return "redirect:/home?error=unauthorized";
     }
 }

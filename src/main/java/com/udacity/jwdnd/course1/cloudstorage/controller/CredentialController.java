@@ -39,8 +39,21 @@ public class CredentialController {
     }
 
     @GetMapping("/credential/delete/{credentialid}")
-    public String deleteCredential(@PathVariable Integer credentialid) {
-        credentialService.deleteCredential(credentialid);
-        return "redirect:/home?tab=credentials&success=credentialDeleted";
+    public String deleteCredential(@PathVariable Integer credentialid,
+                                   Authentication authentication) {
+
+        String username = authentication.getName();
+        User user = userService.getUser(username);
+
+        Credential credential = credentialService.getCredential(credentialid);
+
+        if (credential != null &&
+                credential.getUserid().equals(user.getUserid())) {
+
+            credentialService.deleteCredential(credentialid);
+            return "redirect:/home?tab=credentials&success=credentialDeleted";
+        }
+
+        return "redirect:/home?tab=credentials&error=unauthorized";
     }
 }

@@ -38,8 +38,19 @@ public class NoteController {
     }
 
     @GetMapping("/note/delete/{noteid}")
-    public String deleteNote(@PathVariable Integer noteid) {
-        noteService.deleteNote(noteid);
-        return "redirect:/home?tab=notes&success=noteDeleted";
+    public String deleteNote(@PathVariable Integer noteid,
+                             Authentication authentication) {
+
+        String username = authentication.getName();
+        User user = userService.getUser(username);
+
+        Note note = noteService.getNote(noteid);
+
+        if (note != null && note.getUserid().equals(user.getUserid())) {
+            noteService.deleteNote(noteid);
+            return "redirect:/home?tab=notes&success=noteDeleted";
+        }
+
+        return "redirect:/home?tab=notes&error=unauthorized";
     }
 }
