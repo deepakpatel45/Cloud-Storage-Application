@@ -12,6 +12,15 @@ This application allows users to:
 
 ---
 
+## Requirements
+
+Before running the project, make sure you have:
+
+- Java 17
+- Maven 3+
+- PostgreSQL
+- Google Chrome (for Selenium tests)
+
 ## Features
 
 ### User Authentication
