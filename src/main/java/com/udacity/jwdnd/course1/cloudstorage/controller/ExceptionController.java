@@ -9,6 +9,6 @@ public class ExceptionController {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleMaxSizeException() {
-        return "redirect:/home?error=fileTooLarge";
+        return "redirect:/home?tab=files&error=fileTooLarge";
     }
 }

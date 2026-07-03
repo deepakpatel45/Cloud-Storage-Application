@@ -48,8 +48,8 @@ class CloudStorageApplicationTests {
 	/**
 	 * PLEASE DO NOT DELETE THIS method.
 	 */
-	private void doMockSignUp(String firstName, String lastName,
-							  String userName, String password) {
+	private String doMockSignUp(String firstName, String lastName,
+								String userName, String password) {
 
 		WebDriverWait webDriverWait =
 				new WebDriverWait(driver, Duration.ofSeconds(2));
@@ -65,9 +65,11 @@ class CloudStorageApplicationTests {
 				driver.findElement(By.id("inputLastName"));
 		inputLastName.sendKeys(lastName);
 
+		String uniqueUsername = userName + (System.nanoTime() % 100000);
+
 		WebElement inputUsername =
 				driver.findElement(By.id("inputUsername"));
-		inputUsername.sendKeys(userName);
+		inputUsername.sendKeys(uniqueUsername);
 
 		WebElement inputPassword =
 				driver.findElement(By.id("inputPassword"));
@@ -77,11 +79,18 @@ class CloudStorageApplicationTests {
 				driver.findElement(By.id("buttonSignUp"));
 		buttonSignUp.click();
 
+		webDriverWait.until(
+				ExpectedConditions.visibilityOfElementLocated(
+						By.id("success-msg"))
+		);
+
 		Assertions.assertTrue(
 				driver.findElement(By.id("success-msg"))
 						.getText()
 						.contains("You successfully signed up!")
 		);
+
+		return uniqueUsername;
 	}
 
 	/**
@@ -113,16 +122,15 @@ class CloudStorageApplicationTests {
 	public void testRedirection() {
 		doMockSignUp("Redirection", "Test", "RT", "123");
 
-		Assertions.assertEquals(
-				"http://localhost:" + this.port + "/login",
-				driver.getCurrentUrl()
+		Assertions.assertTrue(
+				driver.getCurrentUrl().contains("/login")
 		);
 	}
 
 	@Test
 	public void testBadUrl() {
-		doMockSignUp("URL", "Test", "UT", "123");
-		doLogIn("UT", "123");
+		String username = doMockSignUp("URL", "Test", "UT", "123");
+		doLogIn(username, "123");
 
 		driver.get("http://localhost:" + this.port + "/some-random-page");
 
@@ -133,8 +141,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void testLargeUpload() {
-		doMockSignUp("Large File", "Test", "LFT", "123");
-		doLogIn("LFT", "123");
+		String username = doMockSignUp("Large File", "Test", "LFT", "123");
+		doLogIn(username, "123");
 
 		WebDriverWait webDriverWait =
 				new WebDriverWait(driver, Duration.ofSeconds(2));

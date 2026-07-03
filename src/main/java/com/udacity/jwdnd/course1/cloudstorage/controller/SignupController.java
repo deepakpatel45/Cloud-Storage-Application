@@ -30,12 +30,11 @@ public class SignupController {
 
         int rows = userService.createUser(user);
 
-        if (rows < 0) {
+        if (rows < 1) {
             model.addAttribute("signupError", "There was an error signing you up");
             return "signup";
         }
 
-        model.addAttribute("signupSuccess", true);
-        return "login";
+        return "redirect:/login?signupSuccess=true";
     }
 }
